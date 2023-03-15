@@ -28,13 +28,13 @@
         <h1>ToDo App</h1>
         <form>
         <label for="css">Task Name</label><br>
-        <input id="text" placeholder="kuch likho" required/><br>
+        <input id="text" placeholder="Task Name" required/><br>
 
         <label for="css">Due Date</label><br>
-        <input type="date" id="dmy" placeholder="kuch likho" ><br>
+        <input type="date" id="dmy" placeholder="Date" ><br>
 
         <label for="css">Task Description</label></br>
-        <input  id ="descrip" placeholder="kuch likho"><br><br>
+        <input  id ="descrip" placeholder="Description"><br><br>
 
         <button class="add" id ="TaskAdd" type="reset">Add Task</button>
         </form>
@@ -104,7 +104,7 @@ closeModalBtn.addEventListener('click', () => {
             let dueDate = document.getElementById("dmy");
             let Description = document.getElementById("descrip"); 
             if (taskName.value.trim()==="" || dueDate.value===""||Description.value.trim()===""){
-                alert("please sab bharo")
+                alert("please fill all field")
                 return;
             }
             if(edit_id!=null){
