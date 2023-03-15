@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- bootstrap 5.0.2 css for design -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Task App</title>
+
+</head>
+<body>
+    <h2>Click here</h2><br>
+
+    <!-- Trigger/Open The Modal -->
+    <button id="myBtn">Open Modal</button>
+
+    <div class="main_body">
+        <div id="myModal" class="modal">
+        <div class="modal-content">
+        <span id="close">&times;</span>
+
+        <h1>ToDo App</h1>
+        <form>
+        <label for="css">Task Name</label><br>
+        <input id="text" placeholder="kuch likho" required/><br>
+
+        <label for="css">Due Date</label><br>
+        <input type="date" id="dmy" placeholder="kuch likho" ><br>
+
+        <label for="css">Task Description</label></br>
+        <input  id ="descrip" placeholder="kuch likho"><br><br>
+
+        <button class="add" id ="TaskAdd" type="reset">Add Task</button>
+        </form>
+
+
+        <div>
+            <table id ="taskRow">
+                <thead id="headg"> 
+                    <tr>
+                        <th scope='col'>Task Name</th>
+                        <th scope='col'>Date of Note</th>
+                        <th scope='col'>Description</th>
+        
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+        </div>
+        </div>
+
+    </div>
+
+
+
+
+<script>
+
+
+
+const openModalBtn = document.getElementById('myBtn');
+const closeModalBtn = document.getElementById('close');
+const modalBg = document.getElementById('myModal');
+
+openModalBtn.addEventListener('click', () => {
+  modalBg.style.display = 'flex';
+});
+
+closeModalBtn.addEventListener('click', () => {
+  modalBg.style.display = 'none';
+});
+
+
+    
+    const records=document.getElementById('taskRow');
+
+   
+
+    let addTask = document.getElementById("TaskAdd")
+    let btnText = addTask.innerText
+    let UserArray=[];
+    let edit_id=null;
+
+    DisplayInfo()
+    
+    // below two lines are used to get the info in string form and later on convrt into obj using json parse
+    let objStr=localStorage.getItem('userInfo');
+    if (objStr!=null){
+        UserArray=JSON.parse(objStr)
+
+    }
+
+     addTask.onclick = () => {
+
+            // document.getElementById('headg').style.display='block';
+            let taskName = document.getElementById("text");
+            let dueDate = document.getElementById("dmy");
+            let Description = document.getElementById("descrip"); 
+            if (taskName.value.trim()==="" || dueDate.value===""||Description.value.trim()===""){
+                alert("please sab bharo")
+                return;
+            }
+            if(edit_id!=null){
+                UserArray.splice(edit_id,1,{'name':taskName.value ,'dym':dueDate.value ,'desc':Description.value})
+                edit_id=null;
+            }
+            else{
+                // here we are pushing data into an array in form of key value pair
+                UserArray.push( {'name':taskName.value ,'dym':dueDate.value ,'desc':Description.value} );
+
+            }
+        
+            
+            Saveinfo(UserArray);
+            DisplayInfo()
+            addTask.innerHTML=btnText
+            
+
+            taskName.value =""
+            dueDate.value =""
+            Description.value =""
+        };
+
+
+        // saveinfo
+
+        function Saveinfo(UserArray){
+            localStorage.setItem('userInfo',JSON.stringify(UserArray));
+            DisplayInfo()
+
+
+        }
+        // display info
+
+
+        function DisplayInfo() {
+            let taskName = document.getElementById("text");
+            let dueDate = document.getElementById("dmy");
+            let Description = document.getElementById("descrip"); 
+            records.innerHTML= "";
+
+        let statement=''
+        UserArray.forEach((userInfo,i)=> {
+            
+            statement +=`
+                <tr>
+                    <td>${i+1}</td>
+                    <td> ${userInfo.name}</td>
+                    <td> ${userInfo.dym}</td>
+                    <td> ${userInfo.desc}</td>
+                    <td><button onclick="edit(${i})" style="display:block;">Edit</button></td>
+                    <td> <i onclick="removal(${i})" class="btn btn-danger text-white fa fa-trash"></i></td>
+                </tr>
+            `
+            
+            records.innerHTML=statement;
+
+            taskName.value =""
+            dueDate.value =""
+            Description.value =""
+
+         
+
+        });
+   
+
+        }
+
+
+
+
+     
+    //remove function
+      
+         function removal(id){
+
+                  UserArray.splice(id,1);
+                  Saveinfo(UserArray)
+                  console.log("gvgvgvgv",UserArray);
+                //   DisplayInfo()
+         }
+    // edit function
+         function edit(id){
+            edit_id=id;
+            
+            let taskName = document.getElementById("text");
+            let dueDate = document.getElementById("dmy");
+            let Description = document.getElementById("descrip"); 
+
+            taskName.value =UserArray[id].name;
+            dueDate.value =UserArray[id].dym;
+            Description.value =UserArray[id].desc;
+            addTask.innerText='Save Change'; 
+
+         }
+</script>
+</body>
+</html>
