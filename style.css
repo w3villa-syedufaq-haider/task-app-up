@@ -26,6 +26,13 @@
     padding-right: 100px;
 }
 
+
+#messagediv{
+    background-color: white;
+    color: red;
+    border-radius: 10px;
+}
+
 .main_body .add{
     padding: 20px;
     padding-left: 80px;
@@ -34,6 +41,30 @@
     background-color: rgb(33, 179, 33);
     font-size: 20px;
 }
+
+
+.table_centre{
+    background-color: #faf7f2;
+    width: fit-content;
+    margin-left: auto;  
+    margin-right: auto;  
+    border-radius: 20px;
+}
+
+table, th,tr{    
+    margin-top: 30px;
+    border-bottom: 1px solid black;  
+    margin-left: auto;  
+    margin-right: auto;  
+    width: 500px;  
+    text-align: center;  
+    font-size: 20px;  
+}
+
+.end{
+    margin-top: 40px;
+}
+
 
 .modal_opener{
     text-align: center;
