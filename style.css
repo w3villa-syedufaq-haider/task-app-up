@@ -17,6 +17,10 @@
     box-shadow: 12px 12px 2px 1px rgb(43 43 72 / 62%);
     
 }
+#dmy{
+    width: 415px;
+}
+
 .main_body input{
     padding: 20px;
     margin-top: 20px;
