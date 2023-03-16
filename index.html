@@ -65,69 +65,110 @@
 <script>
 
 
-
 const openModalBtn = document.getElementById('myBtn');
 const closeModalBtn = document.getElementById('close');
 const modalBg = document.getElementById('myModal');
+const messageDiv = document.getElementById("messagediv");
+
+let taskName = document.getElementById("text");
+let dueDate = document.getElementById("dmy");
+let Description = document.getElementById("descrip"); 
+
 
 openModalBtn.addEventListener('click', () => {
   modalBg.style.display = 'flex';
 });
 
 closeModalBtn.addEventListener('click', () => {
+    messageDiv.innerHTML="";
   modalBg.style.display = 'none';
+  taskName.value =""
+  dueDate.value =""
+  Description.value =""
+  
+
+
 });
 
-
+    
     
     const records=document.getElementById('taskRow');
 
-   
+
 
     let addTask = document.getElementById("TaskAdd")
     let btnText = addTask.innerText
     let UserArray=[];
     let edit_id=null;
 
-    DisplayInfo()
-    
     // below two lines are used to get the info in string form and later on convrt into obj using json parse
     let objStr=localStorage.getItem('userInfo');
     if (objStr!=null){
         UserArray=JSON.parse(objStr)
 
     }
+    DisplayInfo()
 
-     addTask.onclick = () => {
-
+     addTask.onclick = (e) => {
+            e.preventDefault();
             // document.getElementById('headg').style.display='block';
-            let taskName = document.getElementById("text");
-            let dueDate = document.getElementById("dmy");
-            let Description = document.getElementById("descrip"); 
-            if (taskName.value.trim()==="" || dueDate.value===""||Description.value.trim()===""){
-                alert("please fill all field")
+           
+
+            
+            if (taskName.value.trim()==="" ){
+                messageDiv.innerHTML = '<h4>Please enter Task Name</h4>';
                 return;
             }
+            if (dueDate.value.trim()==="" ){
+                messageDiv.innerHTML = '<h4>Please enter DMY</h4>';
+                return;
+            }
+            if (Description.value.trim()==="" ){
+                messageDiv.innerHTML = '<h4>Please enter Description</h4>';
+                return;
+            }
+            messageDiv.value=''
+
             if(edit_id!=null){
                 UserArray.splice(edit_id,1,{'name':taskName.value ,'dym':dueDate.value ,'desc':Description.value})
                 edit_id=null;
             }
             else{
+                for(let i = 0; i < UserArray.length; i++){
+                   if(UserArray[i].name == taskName.value){
+                    messageDiv.innerHTML = '<h1>Already Exist</h1>';
+                    return;
+                    
+                   }   
+                }
                 // here we are pushing data into an array in form of key value pair
                 UserArray.push( {'name':taskName.value ,'dym':dueDate.value ,'desc':Description.value} );
 
             }
+
+            modalBg.style.display = 'none';
+
         
             
             Saveinfo(UserArray);
-            DisplayInfo()
-            addTask.innerHTML=btnText
             
+            addTask.innerHTML=btnText
+
 
             taskName.value =""
             dueDate.value =""
             Description.value =""
+
+
+
         };
+
+
+
+
+        function isAlreadyExist(value){
+           
+        }
 
 
         // saveinfo
@@ -156,7 +197,7 @@ closeModalBtn.addEventListener('click', () => {
                     <td> ${userInfo.name}</td>
                     <td> ${userInfo.dym}</td>
                     <td> ${userInfo.desc}</td>
-                    <td><button onclick="edit(${i})" style="display:block;">Edit</button></td>
+                    <td><button onclick="edit(${i})" style="display:block;" class="btn btn-warning">Edit</button></td>
                     <td> <i onclick="removal(${i})" class="btn btn-danger text-white fa fa-trash"></i></td>
                 </tr>
             `
@@ -166,6 +207,7 @@ closeModalBtn.addEventListener('click', () => {
             taskName.value =""
             dueDate.value =""
             Description.value =""
+
 
          
 
@@ -190,7 +232,7 @@ closeModalBtn.addEventListener('click', () => {
     // edit function
          function edit(id){
             edit_id=id;
-            
+            modalBg.style.display = 'flex';
             let taskName = document.getElementById("text");
             let dueDate = document.getElementById("dmy");
             let Description = document.getElementById("descrip"); 
@@ -199,6 +241,7 @@ closeModalBtn.addEventListener('click', () => {
             dueDate.value =UserArray[id].dym;
             Description.value =UserArray[id].desc;
             addTask.innerText='Save Change'; 
+            
 
          }
 </script>
